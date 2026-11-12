@@ -19,9 +19,14 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from fastapi import FastAPI, HTTPException, Path, Query
+from fastapi.responses import FileResponse, HTMLResponse
 from pydantic import BaseModel, Field
 
+from feed_ranker import FeedRanker
+from matching_engine import MatchingEngine
+
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "social_network.db")
+TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
 
 app = FastAPI(title="Sovereign Social Network API", version="2.0.0")
 
@@ -81,6 +86,14 @@ def _user_row_to_model(row: sqlite3.Row) -> UserOut:
 # --------------------------------------------------------------------------- #
 # Routes
 # --------------------------------------------------------------------------- #
+@app.get("/", response_class=FileResponse, summary="Serve Sovereign Web UI")
+def serve_index() -> FileResponse:
+    index_path = os.path.join(TEMPLATES_DIR, "index.html")
+    if not os.path.exists(index_path):
+        raise HTTPException(status_code=404, detail="Web UI template not found")
+    return FileResponse(index_path, media_type="text/html")
+
+
 @app.get("/api/health", response_model=HealthStatus, summary="Service health check")
 def health() -> HealthStatus:
     database_reachable = False
@@ -175,6 +188,26 @@ def get_user_friends(user_id: int = Path(..., ge=1)) -> FriendsResponse:
     finally:
         conn.close()
     return FriendsResponse(user_id=user_id, count=len(rows), friends=rows)
+
+
+@app.get("/api/feed", summary="EdgeRank Ranked Feed")
+def get_feed(
+    viewer_id: int = Query(default=1, ge=1),
+    limit: int = Query(default=50, ge=1, le=500),
+) -> dict:
+    ranker = FeedRanker(DB_PATH)
+    posts = ranker.rank_feed(viewer_id=viewer_id)[:limit]
+    return {"viewer_id": viewer_id, "count": len(posts), "feed": posts}
+
+
+@app.get("/api/matches", summary="Multivariate Contact Matches")
+def get_matches(
+    user_id: int = Query(default=1, ge=1),
+    top_k: int = Query(default=5, ge=1, le=50),
+) -> dict:
+    engine = MatchingEngine(DB_PATH)
+    matches = engine.find_matches(user_id=user_id, top_k=top_k)
+    return {"user_id": user_id, "count": len(matches), "matches": matches}
 
 
 if __name__ == "__main__":
