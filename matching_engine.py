@@ -47,7 +47,19 @@ class MatchingEngine:
             conn.close()
             return []
 
-        cur.execute("SELECT * FROM users WHERE id != ?", (user_id,))
+        # Exclude self and any users who are already friends
+        cur.execute(
+            """
+            SELECT * FROM users 
+            WHERE id != ? 
+              AND id NOT IN (
+                  SELECT user_id_b FROM friendships WHERE user_id_a = ?
+                  UNION
+                  SELECT user_id_a FROM friendships WHERE user_id_b = ?
+              )
+            """,
+            (user_id, user_id, user_id),
+        )
         candidates = [dict(r) for r in cur.fetchall()]
         conn.close()
 

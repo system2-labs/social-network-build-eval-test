@@ -329,25 +329,25 @@ body {
   <!-- ===================== Profile card ========================= -->
   <aside class="panel-profile sticky" aria-label="Your profile">
     <div class="card profile-card">
-      <span class="avatar avatar--lg av-rose" aria-hidden="true">IW</span>
-      <h2>Isla Walker</h2>
-      <p class="handle">@isla &middot; Melbourne, AU</p>
+      <span class="avatar avatar--lg av-rose" id="profile-avatar" aria-hidden="true">IW</span>
+      <h2 id="profile-name">Isla Walker</h2>
+      <p class="handle" id="profile-handle">@isla &middot; Melbourne, AU</p>
 
       <ul class="profile-meta">
         <li>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Melbourne, Australia
+          <span id="profile-city">Melbourne, Australia</span>
         </li>
         <li>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-          Systems Architect
+          <span id="profile-occupation">Graphic Designer</span>
         </li>
       </ul>
 
       <div class="stat-row">
-        <div><strong>128</strong><span>Friends</span></div>
-        <div><strong>342</strong><span>Posts</span></div>
-        <div><strong>97%</strong><span>Match avg</span></div>
+        <div><strong id="stat-friends">0</strong><span>Friends</span></div>
+        <div><strong id="stat-posts">0</strong><span>Posts</span></div>
+        <div><strong id="stat-match">97%</strong><span>Match avg</span></div>
       </div>
 
       <p class="sovereign-note">100% on-device sovereign graph &mdash; no cloud, no CDN.</p>
@@ -372,73 +372,7 @@ body {
       </form>
 
       <ul class="post-list" id="feed-list">
-
-        <li class="post">
-          <span class="avatar avatar--md av-sky" aria-hidden="true">AJ</span>
-          <div>
-            <div class="post-head">
-              <span class="name">Alice Johnson</span>
-              <span style="color:var(--muted);font-size:0.8rem;">Sydney &middot; Teacher</span>
-              <span class="time">2h ago</span>
-            </div>
-            <p class="post-body">Migrating contact clustering to Apple Silicon MPS — sub-second on all 206 nodes and it never leaves the machine.</p>
-            <div class="post-actions">
-              <button type="button" class="act act--like" aria-label="Like post by Alice Johnson">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-                <span class="count">34</span>
-              </button>
-              <button type="button" class="act" aria-label="Comments on post by Alice Johnson">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                <span class="count">7</span>
-              </button>
-            </div>
-          </div>
-        </li>
-
-        <li class="post">
-          <span class="avatar avatar--md av-mint" aria-hidden="true">BS</span>
-          <div>
-            <div class="post-head">
-              <span class="name">Bob Smith</span>
-              <span style="color:var(--muted);font-size:0.8rem;">Brisbane &middot; Electrician</span>
-              <span class="time">5h ago</span>
-            </div>
-            <p class="post-body">Ran the affinity recompute at 5am. Edge node did it in 12ms flat — and there&rsquo;s no cloud bill attached.</p>
-            <div class="post-actions">
-              <button type="button" class="act act--like" aria-label="Like post by Bob Smith">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-                <span class="count">21</span>
-              </button>
-              <button type="button" class="act" aria-label="Comments on post by Bob Smith">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                <span class="count">3</span>
-              </button>
-            </div>
-          </div>
-        </li>
-
-        <li class="post">
-          <span class="avatar avatar--md av-violet" aria-hidden="true">CW</span>
-          <div>
-            <div class="post-head">
-              <span class="name">Carol White</span>
-              <span style="color:var(--muted);font-size:0.8rem;">Perth &middot; Graphic Designer</span>
-              <span class="time">yesterday</span>
-            </div>
-            <p class="post-body">Shipped the new palette for this feed. Zero CDN assets: system fonts, inline SVG, everything rendered on-device.</p>
-            <div class="post-actions">
-              <button type="button" class="act act--like" aria-label="Like post by Carol White">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-                <span class="count">48</span>
-              </button>
-              <button type="button" class="act" aria-label="Comments on post by Carol White">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                <span class="count">12</span>
-              </button>
-            </div>
-          </div>
-        </li>
-
+        <li style="padding:24px;text-align:center;color:var(--muted);font-size:0.9rem;">Loading edge feed...</li>
       </ul>
     </section>
   </main>
@@ -447,35 +381,8 @@ body {
   <aside class="panel-suggestions sticky" aria-label="Friend suggestions">
     <section class="card suggestions-card">
       <h2 class="section-title">Friend Suggestions</h2>
-      <ol class="suggestion-list" style="margin-top:14px;">
-
-        <li class="suggestion">
-          <span class="avatar avatar--sm av-mint" aria-hidden="true">ED</span>
-          <div class="who">
-            <strong>Eve Davis</strong>
-            <span>Adelaide &middot; Student &middot; 12 mutual friends</span>
-          </div>
-          <button type="button" class="btn btn--primary js-connect">Connect</button>
-        </li>
-
-        <li class="suggestion">
-          <span class="avatar avatar--sm av-amber" aria-hidden="true">JS</span>
-          <div class="who">
-            <strong>James Stewart</strong>
-            <span>Adelaide &middot; Chef &middot; 8 mutual friends</span>
-          </div>
-          <button type="button" class="btn btn--primary js-connect">Connect</button>
-        </li>
-
-        <li class="suggestion">
-          <span class="avatar avatar--sm av-violet" aria-hidden="true">SS</span>
-          <div class="who">
-            <strong>Sadie Sullivan</strong>
-            <span>Sydney &middot; Electrician &middot; 5 mutual friends</span>
-          </div>
-          <button type="button" class="btn btn--primary js-connect">Connect</button>
-        </li>
-
+      <ol class="suggestion-list" id="suggestion-list" style="margin-top:14px;">
+        <li style="padding:16px;text-align:center;color:var(--muted);font-size:0.85rem;">Calculating matches...</li>
       </ol>
     </section>
   </aside>
@@ -489,38 +396,203 @@ body {
 </footer>
 
 <script>
-// All interactions are client-side only; nothing is sent over the network.
+// Sovereign On-Device Reactive Client
+// Interacts strictly with local loopback REST endpoints backed by social_network.db.
 (function () {
   "use strict";
 
-  // --- Like buttons: local toggle with live count -------------------
-  document.querySelectorAll(".act--like").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var count = btn.querySelector(".count");
-      var n = parseInt(count.textContent, 10);
-      var liked = btn.classList.toggle("is-liked");
-      count.textContent = String(n + (liked ? 1 : -1));
-      btn.setAttribute("aria-pressed", liked ? "true" : "false");
-    });
-  });
+  var VIEWER_ID = 82; // Isla Walker in social_network.db
+  var avatarColors = ["av-rose", "av-sky", "av-mint", "av-violet", "av-amber"];
 
-  // --- Connect buttons: local state change --------------------------
-  document.querySelectorAll(".js-connect").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      if (!btn.classList.contains("is-sent")) {
-        btn.textContent = "Request sent \u2713";
-        btn.classList.add("is-sent");
-        btn.disabled = true;
-      }
-    });
-  });
+  function getInitials(name) {
+    if (!name) return "??";
+    var parts = name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
 
-  // --- Composer: local-only posting ----------------------------------
+  function getAvatarClass(id) {
+    return avatarColors[(id || 0) % avatarColors.length];
+  }
+
+  function formatTime(created_at) {
+    if (!created_at) return "Just now";
+    var dt = new Date(created_at.includes("T") ? created_at : created_at.replace(" ", "T") + "Z");
+    var diff = Math.floor((new Date() - dt) / 1000);
+    if (isNaN(diff) || diff < 60) return "Just now";
+    if (diff < 3600) return Math.floor(diff / 60) + "m ago";
+    if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
+    return Math.floor(diff / 86400) + "d ago";
+  }
+
+  // --- Load Profile ---
+  function loadProfile() {
+    fetch("/api/me?user_id=" + VIEWER_ID)
+      .then(function (r) { return r.json(); })
+      .then(function (profile) {
+        document.getElementById("profile-name").textContent = profile.name;
+        document.getElementById("profile-handle").textContent = "@" + profile.name.toLowerCase().replace(/\s+/g, "") + " \u00b7 " + profile.city + ", AU";
+        document.getElementById("profile-city").textContent = profile.city + ", Australia";
+        document.getElementById("profile-occupation").textContent = profile.occupation;
+        document.getElementById("stat-friends").textContent = profile.friends_count;
+        document.getElementById("stat-posts").textContent = profile.posts_count;
+        document.getElementById("stat-match").textContent = profile.match_avg + "%";
+        var av = document.getElementById("profile-avatar");
+        av.textContent = getInitials(profile.name);
+      })
+      .catch(function (err) { console.error("Error loading profile:", err); });
+  }
+
+  // --- Load Suggestions ---
+  function loadSuggestions() {
+    fetch("/api/matches?user_id=" + VIEWER_ID + "&top_k=4")
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var list = document.getElementById("suggestion-list");
+        list.innerHTML = "";
+        var matches = data.matches || [];
+        if (matches.length === 0) {
+          list.innerHTML = '<li style="color:var(--muted);font-size:0.85rem;padding:8px 0;text-align:center;">All nearby contacts connected!</li>';
+          return;
+        }
+        matches.forEach(function (cand) {
+          var li = document.createElement("li");
+          li.className = "suggestion";
+
+          var av = document.createElement("span");
+          av.className = "avatar avatar--sm " + getAvatarClass(cand.candidate_id);
+          av.textContent = getInitials(cand.name);
+
+          var who = document.createElement("div");
+          who.className = "who";
+          var nameStrong = document.createElement("strong");
+          nameStrong.textContent = cand.name;
+          var metaSpan = document.createElement("span");
+          var pct = Math.round(cand.affinity_score * 100);
+          metaSpan.textContent = cand.city + " \u00b7 " + cand.occupation + " \u00b7 " + pct + "% match";
+          who.appendChild(nameStrong);
+          who.appendChild(metaSpan);
+
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "btn btn--primary js-connect";
+          btn.textContent = "Connect";
+          btn.addEventListener("click", function () {
+            btn.disabled = true;
+            btn.textContent = "Connecting...";
+            fetch("/api/connect", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ user_id_a: VIEWER_ID, user_id_b: cand.candidate_id })
+            })
+            .then(function (r) { return r.json(); })
+            .then(function () {
+              btn.textContent = "Connected \u2713";
+              btn.classList.add("is-sent");
+              var fCount = document.getElementById("stat-friends");
+              fCount.textContent = parseInt(fCount.textContent || "0", 10) + 1;
+              setTimeout(loadSuggestions, 800);
+            })
+            .catch(function (err) {
+              btn.disabled = false;
+              btn.textContent = "Retry";
+              console.error("Connect error:", err);
+            });
+          });
+
+          li.appendChild(av);
+          li.appendChild(who);
+          li.appendChild(btn);
+          list.appendChild(li);
+        });
+      })
+      .catch(function (err) { console.error("Error loading suggestions:", err); });
+  }
+
+  // --- Load Feed ---
+  function loadFeed() {
+    fetch("/api/feed?viewer_id=" + VIEWER_ID + "&limit=20")
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var list = document.getElementById("feed-list");
+        list.innerHTML = "";
+        var posts = data.feed || [];
+        if (posts.length === 0) {
+          list.innerHTML = '<li style="padding:24px;text-align:center;color:var(--muted);font-size:0.9rem;">No posts yet. Share something above!</li>';
+          return;
+        }
+        posts.forEach(function (post) {
+          var li = document.createElement("li");
+          li.className = "post";
+
+          var av = document.createElement("span");
+          av.className = "avatar avatar--md " + getAvatarClass(post.author_id);
+          av.textContent = getInitials(post.name);
+
+          var wrap = document.createElement("div");
+
+          var head = document.createElement("div");
+          head.className = "post-head";
+
+          var name = document.createElement("span");
+          name.className = "name";
+          name.textContent = post.name || "Community Member";
+
+          var meta = document.createElement("span");
+          meta.style.cssText = "color:var(--muted);font-size:0.8rem;";
+          meta.textContent = (post.city || "") + (post.occupation ? " \u00b7 " + post.occupation : "");
+
+          var time = document.createElement("span");
+          time.className = "time";
+          time.textContent = formatTime(post.created_at);
+
+          head.appendChild(name);
+          head.appendChild(meta);
+          head.appendChild(time);
+
+          var body = document.createElement("p");
+          body.className = "post-body";
+          body.textContent = post.content;
+
+          var actions = document.createElement("div");
+          actions.className = "post-actions";
+
+          var likeBtn = document.createElement("button");
+          likeBtn.type = "button";
+          likeBtn.className = "act act--like";
+          likeBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg> <span class="count">' + (post.likes_count || 0) + '</span>';
+
+          likeBtn.addEventListener("click", function () {
+            likeBtn.disabled = true;
+            fetch("/api/posts/" + post.id + "/like", { method: "POST" })
+              .then(function (r) { return r.json(); })
+              .then(function (res) {
+                likeBtn.classList.add("is-liked");
+                likeBtn.querySelector(".count").textContent = res.likes_count;
+              })
+              .catch(function (err) { console.error("Like error:", err); })
+              .finally(function () { likeBtn.disabled = false; });
+          });
+
+          actions.appendChild(likeBtn);
+
+          wrap.appendChild(head);
+          wrap.appendChild(body);
+          wrap.appendChild(actions);
+
+          li.appendChild(av);
+          li.appendChild(wrap);
+          list.appendChild(li);
+        });
+      })
+      .catch(function (err) { console.error("Error loading feed:", err); });
+  }
+
+  // --- Composer Submission ---
   var form = document.getElementById("composer");
   var input = document.getElementById("composer-input");
   var counter = document.getElementById("char-count");
   var postBtn = document.getElementById("post-btn");
-  var list = document.getElementById("feed-list");
 
   function updateCounter() {
     counter.textContent = input.value.length + " / 500";
@@ -529,45 +601,40 @@ body {
   input.addEventListener("input", updateCounter);
 
   form.addEventListener("submit", function (e) {
-    e.preventDefault(); // never submit anywhere — on-device only
+    e.preventDefault();
     var text = input.value.trim();
     if (!text) return;
 
-    var li = document.createElement("li");
-    li.className = "post";
+    postBtn.disabled = true;
+    postBtn.textContent = "Posting...";
 
-    var avatar = document.createElement("span");
-    avatar.className = "avatar avatar--md av-rose";
-    avatar.setAttribute("aria-hidden", "true");
-    avatar.textContent = "IW";
-
-    var wrap = document.createElement("div");
-    var head = document.createElement("div");
-    head.className = "post-head";
-    var name = document.createElement("span");
-    name.className = "name";
-    name.textContent = "Isla Walker";
-    var meta = document.createElement("span");
-    meta.style.cssText = "color:var(--muted);font-size:0.8rem;";
-    meta.textContent = "Melbourne \u00b7 Systems Architect";
-    var time = document.createElement("span");
-    time.className = "time";
-    time.textContent = "Just now";
-    head.appendChild(name); head.appendChild(meta); head.appendChild(time);
-
-    var body = document.createElement("p"); // textContent => safe from HTML injection
-    body.className = "post-body";
-    body.textContent = text;
-
-    wrap.appendChild(head);
-    wrap.appendChild(body);
-    li.appendChild(avatar);
-    li.appendChild(wrap);
-    list.insertBefore(li, list.firstChild);
-
-    input.value = "";
-    updateCounter();
+    fetch("/api/posts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: VIEWER_ID, content: text })
+    })
+    .then(function (r) { return r.json(); })
+    .then(function () {
+      input.value = "";
+      updateCounter();
+      var pCount = document.getElementById("stat-posts");
+      pCount.textContent = parseInt(pCount.textContent || "0", 10) + 1;
+      loadFeed();
+    })
+    .catch(function (err) {
+      alert("Failed to save post to SQLite");
+      console.error("Post error:", err);
+    })
+    .finally(function () {
+      postBtn.textContent = "Post locally";
+      updateCounter();
+    });
   });
+
+  // Execute on load
+  loadProfile();
+  loadFeed();
+  loadSuggestions();
 })();
 </script>
 

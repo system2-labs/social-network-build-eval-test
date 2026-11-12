@@ -67,6 +67,44 @@ class FriendsResponse(BaseModel):
     friends: list[FriendOut]
 
 
+class CreatePostIn(BaseModel):
+    user_id: int = Field(ge=1)
+    content: str = Field(min_length=1, max_length=500)
+
+
+class PostOut(BaseModel):
+    id: int
+    user_id: int
+    content: str
+    likes_count: int
+    created_at: str
+
+
+class ConnectIn(BaseModel):
+    user_id_a: int = Field(ge=1)
+    user_id_b: int = Field(ge=1)
+
+
+class ConnectOut(BaseModel):
+    status: str
+    user_id_a: int
+    user_id_b: int
+    affinity_score: float
+
+
+class ProfileOut(BaseModel):
+    id: int
+    name: str
+    age: int
+    gender: Optional[str] = None
+    city: str
+    occupation: str
+    marital_status: str
+    friends_count: int
+    posts_count: int
+    match_avg: float
+
+
 # --------------------------------------------------------------------------- #
 # DB helpers
 # --------------------------------------------------------------------------- #
@@ -208,6 +246,137 @@ def get_matches(
     engine = MatchingEngine(DB_PATH)
     matches = engine.find_matches(user_id=user_id, top_k=top_k)
     return {"user_id": user_id, "count": len(matches), "matches": matches}
+
+
+@app.get("/api/me", response_model=ProfileOut, summary="Get active viewer profile")
+def get_me(user_id: int = Query(default=82, ge=1)) -> ProfileOut:
+    conn = get_db()
+    try:
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT id, name, age, gender, city, occupation, marital_status"
+            " FROM users WHERE id = ?",
+            (user_id,),
+        )
+        user_row = cur.fetchone()
+        if user_row is None:
+            raise HTTPException(status_code=404, detail=f"User {user_id} not found")
+
+        cur.execute(
+            "SELECT COUNT(*) FROM friendships WHERE user_id_a = ? OR user_id_b = ?",
+            (user_id, user_id),
+        )
+        friends_count = cur.fetchone()[0]
+
+        cur.execute(
+            "SELECT COUNT(*) FROM feed_posts WHERE user_id = ?",
+            (user_id,),
+        )
+        posts_count = cur.fetchone()[0]
+    finally:
+        conn.close()
+
+    engine = MatchingEngine(DB_PATH)
+    matches = engine.find_matches(user_id=user_id, top_k=5)
+    match_avg = (
+        round(sum(m["affinity_score"] for m in matches) / len(matches) * 100, 1)
+        if matches
+        else 95.0
+    )
+
+    data = dict(user_row)
+    data["friends_count"] = friends_count
+    data["posts_count"] = posts_count
+    data["match_avg"] = match_avg
+    return ProfileOut.model_validate(data)
+
+
+@app.post("/api/posts", response_model=PostOut, status_code=201, summary="Create a feed post")
+def create_post(payload: CreatePostIn) -> PostOut:
+    conn = get_db()
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT id FROM users WHERE id = ?", (payload.user_id,))
+        if cur.fetchone() is None:
+            raise HTTPException(status_code=404, detail=f"User {payload.user_id} not found")
+
+        cur.execute(
+            "INSERT INTO feed_posts (user_id, content, likes_count, created_at)"
+            " VALUES (?, ?, 0, CURRENT_TIMESTAMP)",
+            (payload.user_id, payload.content),
+        )
+        post_id = cur.lastrowid
+        conn.commit()
+
+        cur.execute(
+            "SELECT id, user_id, content, likes_count, created_at FROM feed_posts WHERE id = ?",
+            (post_id,),
+        )
+        row = cur.fetchone()
+    finally:
+        conn.close()
+
+    return PostOut.model_validate(dict(row))
+
+
+@app.post("/api/connect", response_model=ConnectOut, summary="Connect two users as friends")
+def connect_users(payload: ConnectIn) -> ConnectOut:
+    if payload.user_id_a == payload.user_id_b:
+        raise HTTPException(status_code=400, detail="Cannot connect a user with themselves")
+
+    conn = get_db()
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT id, city, occupation, age FROM users WHERE id = ?", (payload.user_id_a,))
+        u1 = cur.fetchone()
+        cur.execute("SELECT id, city, occupation, age FROM users WHERE id = ?", (payload.user_id_b,))
+        u2 = cur.fetchone()
+
+        if u1 is None or u2 is None:
+            raise HTTPException(status_code=404, detail="One or both users not found")
+
+        engine = MatchingEngine(DB_PATH)
+        affinity = engine.calculate_compatibility(dict(u1), dict(u2))
+
+        # Store unordered friendship pair consistently (min_id, max_id)
+        id_a, id_b = sorted([payload.user_id_a, payload.user_id_b])
+        cur.execute(
+            "INSERT OR REPLACE INTO friendships (user_id_a, user_id_b, affinity_score, created_at)"
+            " VALUES (?, ?, ?, CURRENT_TIMESTAMP)",
+            (id_a, id_b, affinity),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    return ConnectOut(
+        status="connected",
+        user_id_a=payload.user_id_a,
+        user_id_b=payload.user_id_b,
+        affinity_score=affinity,
+    )
+
+
+@app.post("/api/posts/{post_id}/like", summary="Like a feed post")
+def like_post(post_id: int = Path(..., ge=1)) -> dict:
+    conn = get_db()
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT likes_count FROM feed_posts WHERE id = ?", (post_id,))
+        row = cur.fetchone()
+        if row is None:
+            raise HTTPException(status_code=404, detail=f"Post {post_id} not found")
+
+        new_count = row["likes_count"] + 1
+        cur.execute(
+            "UPDATE feed_posts SET likes_count = ? WHERE id = ?",
+            (new_count, post_id),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    return {"id": post_id, "likes_count": new_count}
 
 
 if __name__ == "__main__":

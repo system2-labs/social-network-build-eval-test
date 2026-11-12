@@ -169,7 +169,7 @@ class FeedRanker:
         ranked: List[Dict[str, Any]] = []
         for post in raw_posts:
             author_id = post["author_id"]
-            relationship = viewer_friends.get(author_id, DISCOVERY_FLOOR)
+            relationship = 1.0 if author_id == viewer_id else viewer_friends.get(author_id, DISCOVERY_FLOOR)
             social_proof = PROOF_WEIGHT * math.log1p(max(0, int(post["likes_count"]) or 0))
             affinity = REL_WEIGHT * relationship + social_proof
 
